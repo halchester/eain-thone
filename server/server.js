@@ -29,7 +29,9 @@ app.use(function (req, res, next) {
 
 //Routes import and Routes usage
 const userRoutes = require("./app/routers/user.router");
-app.use("/", userRoutes);
+const tobuyRoutes = require("./app/routers/tobuyitem.router");
+const instockRoutes = require("./app/routers/instockitem.router");
+app.use("/", userRoutes, tobuyRoutes, instockRoutes);
 
 // Connecting to DB
 mongoose
