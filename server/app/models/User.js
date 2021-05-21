@@ -11,16 +11,18 @@ const UserModel = mongoose.Schema(
       type: String,
       required: true,
     },
-    instockItems: {
-      type: mongoose.Schema.Types.Array,
-      default: [],
-      ref: "InstockItem",
-    },
-    tobuyItems: {
-      type: mongoose.Schema.Types.Array,
-      default: [],
-      ref: "ToBuyItem",
-    },
+    instockItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "InstockItem",
+      },
+    ],
+    tobuyItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ToBuyItem",
+      },
+    ],
     uniqueId: {
       type: String,
     },
