@@ -28,14 +28,16 @@ app.use(function (req, res, next) {
 });
 
 //Routes import and Routes usage
+const userRoutes = require("./app/routers/user.router");
+app.use("/", userRoutes);
 
 // Connecting to DB
 mongoose
   .connect(
-    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.x3hwc.mongodb.net/miitdotnet?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.x3hwc.mongodb.net/eainthone?retryWrites=true&w=majority`,
     options
   )
-  .then((response) =>
+  .then(() =>
     app.listen(PORT, () => console.log(`Server up and running at ${PORT}`))
   )
   .catch((err) => console.log(err));
