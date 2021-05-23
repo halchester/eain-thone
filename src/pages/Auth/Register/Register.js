@@ -1,13 +1,30 @@
-import React from "react";
-import { Box, Button, TextField, Typography } from "@material-ui/core";
+import React, { useEffect } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { Formik } from "formik";
+import { registerUser } from "../../../store/actions/auth.actions";
+import * as actionTypes from "../../../store/acionTypes";
 
 // Styling and utils
 import AuthStyles, { registerInitialValues } from "../AuthStyles";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 function Register() {
   const classes = AuthStyles();
+  const dispatch = useDispatch();
+  const ui = useSelector((state) => state.ui);
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch({ type: actionTypes.CLEAR_MESSAGE });
+  }, []);
+
   return (
     <Box className={classes.root}>
       <Typography variant="h3" align="center" gutterBottom>
@@ -16,11 +33,23 @@ function Register() {
       <Formik
         initialValues={registerInitialValues}
         onSubmit={async (values) => {
-          console.log(values);
+          const payload = {
+            username: values.username,
+            password: values.password,
+          };
+          dispatch(registerUser(payload));
         }}
       >
-        {({ values, handleChange, errors, handleSubmit }) => (
+        {({ values, handleChange, handleSubmit }) => (
           <form className={classes.formContainer} onSubmit={handleSubmit}>
+            {ui.isLoading ? (
+              <CircularProgress style={{ margin: "1rem" }} />
+            ) : null}
+            {auth.message.length > 0 ? (
+              <Typography align="center" className={classes.input}>
+                <strong>{auth.message}</strong>
+              </Typography>
+            ) : null}
             <TextField
               id="username"
               variant="filled"

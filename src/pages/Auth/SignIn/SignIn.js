@@ -1,13 +1,34 @@
-import React from "react";
-import { Box, Button, TextField, Typography } from "@material-ui/core";
+import React, { useEffect } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { Formik } from "formik";
-
+import { signInUser } from "../../../store/actions/auth.actions";
+import * as actionTypes from "../../../store/acionTypes";
 // Styling and utils
 import AuthStyles, { signinInitialValues } from "../AuthStyles";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const SignIn = () => {
   const classes = AuthStyles();
+  const dispatch = useDispatch();
+  const ui = useSelector((state) => state.ui);
+  const auth = useSelector((state) => state.auth);
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch({ type: actionTypes.CLEAR_MESSAGE });
+  }, []);
+
+  if (auth.token) {
+    history.push("/home");
+  }
+
   return (
     <Box className={classes.root}>
       <Typography variant="h3" align="center" gutterBottom>
@@ -16,11 +37,23 @@ const SignIn = () => {
       <Formik
         initialValues={signinInitialValues}
         onSubmit={async (values) => {
-          console.log(values);
+          const payload = {
+            username: values.username,
+            password: values.password,
+          };
+          dispatch(signInUser(payload));
         }}
       >
         {({ values, handleChange, errors, handleSubmit }) => (
           <form className={classes.formContainer} onSubmit={handleSubmit}>
+            {ui.isLoading ? (
+              <CircularProgress style={{ margin: "1rem" }} />
+            ) : null}
+            {auth.message.length > 0 ? (
+              <Typography align="center" className={classes.input}>
+                <strong>{auth.message}</strong>
+              </Typography>
+            ) : null}
             <TextField
               id="username"
               variant="filled"

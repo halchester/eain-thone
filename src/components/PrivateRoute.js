@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { isAuth } from "../utils/auth";
 
 // Hooks
 // import { useSelector } from "react-redux";
@@ -10,7 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        console.log("asdf") ? <Component {...props} /> : <Redirect to="/" />
+        isAuth() ? <Component {...props} /> : <Redirect to="/signin" />
       }
     />
   );

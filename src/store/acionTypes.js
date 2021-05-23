@@ -1,0 +1,14 @@
+// for authReducer
+export const REGISTER_USER = "REGISTER_USER";
+export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
+export const REGISTER_USER_FAILURE = "REGISTER_USER_FAILURE";
+
+export const SIGNIN_USER = "SIGNIN_USER";
+export const SIGNIN_USER_SUCCESS = "SIGNIN_USER_SUCCESS";
+export const SIGNIN_USER_FAILURE = "SIGNIN_USER_FAILURE";
+
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+
+// for uiReducer
+export const LOADING_TRUE = "LOADING_TRUE";
+export const LOADING_FALSE = "LOADING_FALSE";

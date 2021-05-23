@@ -4,8 +4,13 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 // Reducers import
+import authReducer from "./reducers/auth.reducer";
+import uiReducer from "./reducers/ui.reducer";
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  auth: authReducer,
+  ui: uiReducer,
+});
 
 const persistConfig = {
   key: "root",
