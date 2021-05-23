@@ -9,6 +9,12 @@ export const SIGNIN_USER_FAILURE = "SIGNIN_USER_FAILURE";
 
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
+export const SIGNOUT_CURRENT_USER = "SIGNOUT_CURRENT_USER";
+
 // for uiReducer
 export const LOADING_TRUE = "LOADING_TRUE";
 export const LOADING_FALSE = "LOADING_FALSE";
+
+export const TOGGLE_DRAWER = "TOGGLE_DRAWER";
+export const CLOSE_DRAWER = "CLOSE_DRAWER";
+export const OPEN_DRAWER = "OPEN_DRAWER";

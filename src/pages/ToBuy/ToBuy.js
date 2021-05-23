@@ -1,12 +1,14 @@
 import { Box, Typography } from "@material-ui/core";
 import React from "react";
+import CustomAppbar from "../../components/CustomAppbar";
 
-function ToBuy() {
+function Home() {
   return (
     <Box>
-      <Typography>To Buy page</Typography>
+      <CustomAppbar name="To Buy" />
+      <Typography>To buy</Typography>
     </Box>
   );
 }
 
-export default ToBuy;
+export default Home;

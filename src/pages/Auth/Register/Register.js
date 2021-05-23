@@ -23,6 +23,7 @@ function Register() {
 
   useEffect(() => {
     dispatch({ type: actionTypes.CLEAR_MESSAGE });
+    // eslint-disable-next-line
   }, []);
 
   return (

@@ -1,7 +1,6 @@
 import * as actionTypes from "../acionTypes";
 
 const initialState = {
-  isAuth: false,
   token: "",
   userData: {},
   message: "",
@@ -33,6 +32,14 @@ const authReducer = (state = initialState, action) => {
     case actionTypes.CLEAR_MESSAGE:
       return {
         ...state,
+        message: "",
+      };
+    case actionTypes.SIGNOUT_CURRENT_USER:
+      localStorage.setItem("auth", null);
+      return {
+        ...state,
+        token: "",
+        userData: "",
         message: "",
       };
     default:

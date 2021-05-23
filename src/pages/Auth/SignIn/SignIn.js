@@ -23,6 +23,7 @@ const SignIn = () => {
 
   useEffect(() => {
     dispatch({ type: actionTypes.CLEAR_MESSAGE });
+    // eslint-disable-next-line
   }, []);
 
   if (auth.token) {
