@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,10 +9,11 @@ import {
   makeStyles,
   TextField,
 } from "@material-ui/core";
-import React, { useState } from "react";
 import CustomAppbar from "../../components/CustomAppbar";
 import AddIcon from "@material-ui/icons/Add";
 import { Formik } from "formik";
+import { useSelector } from "react-redux";
+import axios from "../../api/index";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,8 +60,9 @@ export default Home;
 
 const AddNew = ({ open, setOpen }) => {
   const classes = useStyles();
+  const auth = useSelector((state) => state.auth);
+  console.log(auth);
 
-  // No idea what this code does, jus copy pasting from docs :/
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
     if (open) {
@@ -89,7 +92,21 @@ const AddNew = ({ open, setOpen }) => {
               picURL: "",
             }}
             onSubmit={async (values) => {
-              console.log(values);
+              const { name, quantity, picURL } = values;
+              const payload = {
+                name,
+                quantity,
+                picURL,
+                userId: auth.userData.uniqueId,
+              };
+              axios
+                .post("/api/instock", payload, {
+                  headers: {
+                    Auth: auth.token,
+                  },
+                })
+                .then((response) => console.log(response))
+                .catch((err) => console.log(err));
             }}
           >
             {({ handleSubmit, values, handleChange, errors }) => (

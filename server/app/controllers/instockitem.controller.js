@@ -1,7 +1,8 @@
 const InstockItem = require("../models/InstockItem");
+const User = require("../models/User");
 
 exports.addInstockItem = async (req, res) => {
-  const { name, quantity, picURL } = req.body;
+  const { name, quantity, picURL, userId } = req.body;
   try {
     const newItem = new InstockItem({
       name,
@@ -9,7 +10,15 @@ exports.addInstockItem = async (req, res) => {
       picURL,
     });
 
-    newItem.save().then((response) => {
+    newItem.save().then(async (response) => {
+      await User.updateOne(
+        { uniqueId: userId },
+        {
+          $push: {
+            instockItems: response,
+          },
+        }
+      );
       return res
         .status(200)
         .json({ success: true, data: response, error: null });
