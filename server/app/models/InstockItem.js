@@ -8,12 +8,11 @@ const InstockItemModel = mongoose.Schema(
       required: true,
     },
     quatity: {
-      type: Number,
+      type: String,
       required: true,
     },
     picURL: {
       type: String,
-      required: true,
     },
     uniqueId: {
       type: String,

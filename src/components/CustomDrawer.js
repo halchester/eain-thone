@@ -41,7 +41,10 @@ const CustomDrawer = () => {
         <List>
           <ListItem
             className={classes.root}
-            onClick={() => history.push("/home")}
+            onClick={() => {
+              history.push("/home");
+              dispatch({ type: actionTypes.CLOSE_DRAWER });
+            }}
           >
             <ListItemIcon>
               <NewReleasesIcon />
@@ -50,7 +53,10 @@ const CustomDrawer = () => {
           </ListItem>
           <ListItem
             className={classes.root}
-            onClick={() => history.push("/tobuy")}
+            onClick={() => {
+              history.push("/tobuy");
+              dispatch({ type: actionTypes.CLOSE_DRAWER });
+            }}
           >
             <ListItemIcon>
               <InboxIcon />
