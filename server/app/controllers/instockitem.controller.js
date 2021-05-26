@@ -5,9 +5,7 @@ exports.getAllInstockItem = async (req, res) => {
   const { uniqueId } = req.params;
   try {
     const response = await User.findOne({ uniqueId }).populate("instockItems");
-    return res
-      .status(200)
-      .json({ success: false, data: response, error: "Something went wrong!" });
+    return res.status(200).json({ success: true, data: response, error: null });
   } catch (err) {
     console.log(err);
     return res
