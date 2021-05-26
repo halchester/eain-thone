@@ -1,6 +1,21 @@
 const InstockItem = require("../models/InstockItem");
 const User = require("../models/User");
 
+exports.getAllInstockItem = async (req, res) => {
+  const { uniqueId } = req.params;
+  try {
+    const response = await User.findOne({ uniqueId }).populate("instockItems");
+    return res
+      .status(200)
+      .json({ success: false, data: response, error: "Something went wrong!" });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(400)
+      .json({ success: false, data: {}, error: "Something went wrong!" });
+  }
+};
+
 exports.addInstockItem = async (req, res) => {
   const { name, quantity, picURL, userId } = req.body;
   try {
