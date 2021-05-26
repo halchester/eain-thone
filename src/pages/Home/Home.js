@@ -20,6 +20,7 @@ import axios from "../../api/index";
 import { useQuery } from "react-query";
 import { getAllInstockItemsOfUser } from "../../api/query";
 import InstockItemCard from "../../components/InstockItemCard";
+import { addNewInstockItemValidation } from "../../utils/formValidation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,6 +118,7 @@ const AddNew = ({ open, setOpen }) => {
       <DialogContent>
         <Box className={classes.formContainer}>
           <Formik
+            validationSchema={addNewInstockItemValidation}
             initialValues={{
               name: "",
               quantity: "",
@@ -147,7 +149,14 @@ const AddNew = ({ open, setOpen }) => {
                 });
             }}
           >
-            {({ handleSubmit, values, handleChange, errors }) => (
+            {({
+              handleSubmit,
+              values,
+              handleChange,
+              errors,
+              touched,
+              handleBlur,
+            }) => (
               <form onSubmit={handleSubmit}>
                 {loading ? (
                   <CircularProgress style={{ margin: "0.5rem" }} />
@@ -160,6 +169,9 @@ const AddNew = ({ open, setOpen }) => {
                   label="Name"
                   fullWidth
                   className={classes.input}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.name) && Boolean(errors.name)}
+                  helperText={Boolean(touched.name) && errors.name}
                 />
                 <TextField
                   variant="outlined"
@@ -170,6 +182,9 @@ const AddNew = ({ open, setOpen }) => {
                   type="number"
                   fullWidth
                   className={classes.input}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.quantity) && Boolean(errors.quantity)}
+                  helperText={Boolean(touched.quantity) && errors.quantity}
                 />
                 <input
                   accept="image/*"
