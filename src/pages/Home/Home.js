@@ -92,6 +92,7 @@ export default Home;
 const AddNew = ({ open, setOpen }) => {
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(false);
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
@@ -122,6 +123,7 @@ const AddNew = ({ open, setOpen }) => {
               picURL: "",
             }}
             onSubmit={async (values) => {
+              setLoading(true);
               const { name, quantity, picURL } = values;
               const payload = {
                 name,
@@ -135,12 +137,21 @@ const AddNew = ({ open, setOpen }) => {
                     Auth: auth.token,
                   },
                 })
-                .then((response) => console.log(response))
-                .catch((err) => console.log(err));
+                .then(() => {
+                  alert("Added");
+                  setLoading(false);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setLoading(false);
+                });
             }}
           >
             {({ handleSubmit, values, handleChange, errors }) => (
               <form onSubmit={handleSubmit}>
+                {loading ? (
+                  <CircularProgress style={{ margin: "0.5rem" }} />
+                ) : null}
                 <TextField
                   variant="outlined"
                   id="name"
