@@ -1,5 +1,6 @@
 const InstockItem = require("../models/InstockItem");
 const User = require("../models/User");
+const cloudinary = require("cloudinary").v2;
 
 exports.getAllInstockItem = async (req, res) => {
   const { uniqueId } = req.params;
@@ -83,5 +84,37 @@ exports.editInstockItem = async (req, res) => {
     return res
       .status(400)
       .json({ success: false, data: {}, error: "Something went wrong!" });
+  }
+};
+
+const cloudinaryConfig = {
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+};
+
+exports.uploadInstockItemImage = async (req, res) => {
+  try {
+    const filePath = req.file;
+
+    const uploadImage = new Promise((resolve) => {
+      cloudinary.config(cloudinaryConfig);
+      cloudinary.uploader
+        .upload(filePath.path, {
+          folder: "spring_delivery",
+          unique_filename: true,
+        })
+        .then((result) => {
+          const imageUrl = result.secure_url;
+          return resolve(imageUrl);
+        })
+        .catch((err) => err);
+    });
+
+    const image = await uploadImage;
+    return res.status(200).json({ success: true, data: image });
+  } catch (err) {
+    console.log("error", err);
+    return res.status(500).json({ success: true, data: {} });
   }
 };
