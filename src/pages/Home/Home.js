@@ -20,7 +20,12 @@ import axios from "../../api/index";
 import { useQuery } from "react-query";
 import { getAllInstockItemsOfUser } from "../../api/query";
 import InstockItemCard from "../../components/InstockItemCard";
-import { addNewInstockItemValidation } from "../../utils/formValidation";
+import {
+  addNewInstockItemValidation,
+  checkFileSize,
+  checkMimeType,
+  maxSelectedFile,
+} from "../../utils/formValidation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,7 +99,31 @@ export default Home;
 const AddNew = ({ open, setOpen }) => {
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
+
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [imageURL, setImageURL] = useState("");
+
+  const imageUploadHandler = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (maxSelectedFile(e) && checkMimeType(e) && checkFileSize(e)) {
+      const image = e.target.files[0];
+      const data = new FormData();
+      data.append("file", image);
+      axios.post("/api/instock/upload", data).then((response) => {
+        console.log(response.data);
+        setErrorMessage("");
+        setLoading(false);
+        setImageURL(response.data.data);
+      });
+    } else {
+      setLoading(false);
+      setErrorMessage(
+        "ဓါတ်ပုံ ၁ ပုံကိုပဲရွေးပါ ရွေးသောဓါတ်ပုံ file size ကြီးလို့မရပါ"
+      );
+    }
+  };
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
@@ -127,11 +156,11 @@ const AddNew = ({ open, setOpen }) => {
             }}
             onSubmit={async (values) => {
               setLoading(true);
-              const { name, quantity, picURL } = values;
+              const { name, quantity } = values;
               const payload = {
                 name,
                 quantity,
-                picURL,
+                picURL: imageURL,
                 userId: auth.userData.uniqueId,
               };
               axios
@@ -143,6 +172,7 @@ const AddNew = ({ open, setOpen }) => {
                 .then(() => {
                   alert("Added");
                   setLoading(false);
+                  setImageURL("");
                 })
                 .catch((err) => {
                   console.log(err);
@@ -187,15 +217,20 @@ const AddNew = ({ open, setOpen }) => {
                   error={Boolean(touched.quantity) && Boolean(errors.quantity)}
                   helperText={Boolean(touched.quantity) && errors.quantity}
                 />
+                {imageURL ? (
+                  <img
+                    src={imageURL}
+                    alt="your pic"
+                    style={{ marginBottom: "1rem", height: 150 }}
+                  />
+                ) : null}
                 <input
                   accept="image/*"
                   style={{ display: "none" }}
                   id="contained-button-file"
                   multiple
                   type="file"
-                  onChange={(e) => {
-                    console.log(e);
-                  }}
+                  onChange={imageUploadHandler}
                 />
                 <label htmlFor="contained-button-file">
                   <Button
@@ -208,6 +243,16 @@ const AddNew = ({ open, setOpen }) => {
                     Upload photo?
                   </Button>
                 </label>
+                {errorMessage && (
+                  <Typography
+                    className={classes.input}
+                    variant="h6"
+                    color="secondary"
+                    gutterBottom
+                  >
+                    {errorMessage}
+                  </Typography>
+                )}
                 <Button
                   type="submit"
                   onClick={handleSubmit}
