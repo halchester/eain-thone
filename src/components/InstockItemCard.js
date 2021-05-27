@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, makeStyles, Typography } from "@material-ui/core";
+import { Box, Button, Card, makeStyles, Typography } from "@material-ui/core";
 import moment from "moment";
 
 const cardStyles = makeStyles({
@@ -13,11 +13,14 @@ const cardStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  buttonContainer: {
+    marginTop: "0.5rem",
+  },
 });
 
 const InstockItemCard = ({ item }) => {
-  console.log(item);
   const classes = cardStyles();
+
   return (
     <Card elevation={3} className={classes.root}>
       <Box className={classes.container}>
@@ -29,6 +32,19 @@ const InstockItemCard = ({ item }) => {
       <p className="text-sm text-gray-500">
         {moment(item.createdAt).fromNow()}
       </p>
+      <Box className={classes.buttonContainer}>
+        <Button variant="contained" size="small" color="primary">
+          Edit
+        </Button>
+        <Button
+          color="secondary"
+          variant="contained"
+          size="small"
+          style={{ marginLeft: "0.25rem" }}
+        >
+          Delete
+        </Button>
+      </Box>
     </Card>
   );
 };

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "1rem",
   },
   icon: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
@@ -56,18 +56,19 @@ function Home() {
 
   return (
     <Box>
+      <Fab
+        className={classes.icon}
+        color="secondary"
+        size="large"
+        onClick={() => setOpen(true)}
+      >
+        <AddIcon />
+      </Fab>
       <CustomAppbar name="In stock" />
       <Box className={classes.root}>
         <AddNew open={open} setOpen={setOpen} />
         <Box className={classes.container}></Box>
-        <Fab
-          className={classes.icon}
-          color="secondary"
-          size="large"
-          onClick={() => setOpen(true)}
-        >
-          <AddIcon />
-        </Fab>
+
         {error ? (
           <Typography align="center" style={{ color: "red" }} variant="h6">
             Cannot fetch Data :({" "}
