@@ -8,17 +8,18 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Divider,
   Fade,
   makeStyles,
   Modal,
-  Slide,
+  TextField,
 } from "@material-ui/core";
 import moment from "moment";
 import axios from "../api/index";
 import { useSelector } from "react-redux";
+import { Formik } from "formik";
+import { addNewInstockItemValidation } from "../utils/formValidation";
 
 const cardStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +31,9 @@ const cardStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  input: {
+    marginBottom: "1rem",
   },
   buttonContainer: {
     marginTop: "0.5rem",
@@ -52,6 +56,7 @@ const InstockItemCard = ({ item }) => {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [editDialogOpen, setEditDialogOpen] = React.useState(false);
   const auth = useSelector((state) => state.auth);
 
   const handleOpen = () => {
@@ -90,6 +95,7 @@ const InstockItemCard = ({ item }) => {
           variant="contained"
           size="small"
           color="primary"
+          onClick={() => setEditDialogOpen(true)}
         >
           Edit
         </Button>
@@ -105,6 +111,116 @@ const InstockItemCard = ({ item }) => {
         </Button>
 
         {/* Down below dialog is for Delete action and Modal is for viewing image */}
+
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <div className={classes.paper}>
+              <img
+                src={item.picURL}
+                alt=""
+                style={{ height: "250px" }}
+                className="rounded-3xl"
+              />
+            </div>
+          </Fade>
+        </Modal>
+
+        <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+          <DialogTitle id="alert-dialog-slide-title2">
+            Edit for {item.name}
+          </DialogTitle>
+          {loading ? (
+            <CircularProgress style={{ margin: "0.5rem 1rem" }} />
+          ) : null}
+          <DialogContent>
+            <Formik
+              validationSchema={addNewInstockItemValidation}
+              initialValues={{
+                name: item.name,
+                quantity: item.quantity,
+              }}
+              onSubmit={async ({ name, quantity }) => {
+                setLoading(true);
+                const payload = {
+                  name,
+                  quantity,
+                };
+                await axios
+                  .put(`/api/instock/${item.uniqueId}`, payload, {
+                    headers: {
+                      Auth: auth.token,
+                    },
+                  })
+                  .then(() => {
+                    setLoading(false);
+                    alert("Edited!");
+                  })
+                  .catch((err) => {
+                    setLoading(false);
+                    console.log(err);
+                  });
+              }}
+            >
+              {({
+                values,
+                errors,
+                handleChange,
+                handleSubmit,
+                handleBlur,
+                touched,
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    value={values.name}
+                    id="name"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={Boolean(touched.name) && Boolean(errors.name)}
+                    helperText={Boolean(touched.name) && errors.name}
+                    label="Name"
+                    className={classes.input}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    value={values.quantity}
+                    id="quantity"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={
+                      Boolean(touched.quantity) && Boolean(errors.quantity)
+                    }
+                    helperText={Boolean(touched.quantity) && errors.quantity}
+                    label="Quantity"
+                    className={classes.input}
+                  />
+                  <Button
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Save
+                  </Button>
+                </form>
+              )}
+            </Formik>
+          </DialogContent>
+        </Dialog>
+
         <Dialog
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
@@ -152,30 +268,6 @@ const InstockItemCard = ({ item }) => {
             </Button>
           </DialogActions>
         </Dialog>
-
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          className={classes.modal}
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={open}>
-            <div className={classes.paper}>
-              <img
-                src={item.picURL}
-                alt=""
-                style={{ height: "250px" }}
-                className="rounded-3xl"
-              />
-            </div>
-          </Fade>
-        </Modal>
       </Box>
     </Card>
   );
