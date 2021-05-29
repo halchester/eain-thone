@@ -1,8 +1,17 @@
 const tobuyItemController = require("../controllers/tobuyitem.controller");
 const router = require("express").Router();
+const verify = require("../auth/verifiedToken");
 
-router.post("/api/tobuy", tobuyItemController.addTobuyitem);
-router.put("/api/tobuy/:uniqueId", tobuyItemController.editTobuyItem);
-router.delete("/api/tobuy/:uniqueId", tobuyItemController.deleteTobuyItem);
+router.get(
+  "/api/tobuys/:uniqueId",
+  verify,
+  tobuyItemController.getAllTobuyItems
+);
+router.post("/api/tobuy", verify, tobuyItemController.addTobuyitem);
+router.delete(
+  "/api/tobuy/:uniqueId",
+  verify,
+  tobuyItemController.deleteTobuyItem
+);
 
 module.exports = router;

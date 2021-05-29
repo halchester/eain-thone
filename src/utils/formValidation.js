@@ -11,6 +11,13 @@ export const addNewInstockItemValidation = Yup.object().shape({
     .required("Must add quantity!"),
 });
 
+export const addNewTobuyItemValidation = Yup.object().shape({
+  name: Yup.string()
+    .min("2", "Come on man!")
+    .max("100", "Cannot exceed more than 100 words!")
+    .required("Must add name!"),
+});
+
 export const checkMimeType = (event) => {
   // getting file object
   const { files } = event.target;

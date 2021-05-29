@@ -1,5 +1,14 @@
-import { Card, IconButton, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Card,
+  CircularProgress,
+  IconButton,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { useState } from "react";
+import axios from "../api/index";
 
 const useStyles = makeStyles({
   root: {
@@ -12,20 +21,37 @@ const useStyles = makeStyles({
   },
 });
 
-const TobuyItemCard = ({ item }) => {
-  console.log(item);
+const TobuyItemCard = ({ item, authKey }) => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+
+  const handleTobuyDelete = async () => {
+    setLoading(true);
+    axios
+      .delete(`/api/tobuy/${item.uniqueId}`, {
+        headers: {
+          Auth: authKey,
+        },
+      })
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
 
   return (
     <Card className={classes.root}>
-      <Typography style={{ marginLeft: "0.5rem" }}>Anything</Typography>
-      <IconButton
-        onClick={() => {
-          console.log("hi");
-        }}
-      >
+      <Box style={{ marginLeft: "0.5rem" }}>
+        <Typography>{item.name}</Typography>
+        <p className="text-sm text-gray-500">{item.note ? item.note : null}</p>
+      </Box>
+      <IconButton onClick={handleTobuyDelete}>
         <DeleteIcon />
       </IconButton>
+      {loading ? <CircularProgress /> : null}
     </Card>
   );
 };

@@ -11,3 +11,12 @@ export const getAllInstockItemsOfUser = async (props) => {
   });
   return response.data.data;
 };
+
+export const getAllTobuyItemsOfUser = async (props) => {
+  const response = await axios.get(`/api/tobuys/${props.queryKey[2]}`, {
+    headers: {
+      Auth: props.queryKey[1],
+    },
+  });
+  return response.data.data;
+};
