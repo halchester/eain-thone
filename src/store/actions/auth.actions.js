@@ -51,8 +51,8 @@ export const signInUser = (payload) => async (dispatch) => {
     } = await response;
 
     localStorage.setItem("auth", data.token);
-    dispatch({ type: actionTypes.SIGNIN_USER_SUCCESS, payload: data });
     dispatch({ type: actionTypes.LOADING_FALSE });
+    dispatch({ type: actionTypes.SIGNIN_USER_SUCCESS, payload: data });
   } catch (err) {
     console.log(err);
     dispatch({
