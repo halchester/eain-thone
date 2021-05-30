@@ -15,6 +15,12 @@ const AuthStyles = makeStyles({
     color: "gray",
     textDecoration: "underline",
   },
+  footer: {
+    position: "fixed",
+    left: 0,
+    bottom: 30,
+    width: "100%",
+  },
 });
 
 export default AuthStyles;

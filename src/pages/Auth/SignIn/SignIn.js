@@ -97,6 +97,19 @@ const SignIn = () => {
           Register here
         </Link>
       </Typography>
+
+      <Box className={classes.footer}>
+        <a href="/about">
+          <Typography
+            align="center"
+            variant="h5"
+            style={{ textDecoration: "underline" }}
+            color="secondary"
+          >
+            About Eain Thone
+          </Typography>
+        </a>
+      </Box>
     </Box>
   );
 };
