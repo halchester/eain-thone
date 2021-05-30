@@ -12,7 +12,8 @@ const AuthStyles = makeStyles({
     marginBottom: "1rem",
   },
   link: {
-    color: "black",
+    color: "gray",
+    textDecoration: "underline",
   },
 });
 

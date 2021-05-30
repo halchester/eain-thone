@@ -42,7 +42,7 @@ const CustomDrawer = () => {
           <ListItem
             className={classes.root}
             onClick={() => {
-              history.push("/home");
+              history.push("/");
               dispatch({ type: actionTypes.CLOSE_DRAWER });
             }}
           >

@@ -32,7 +32,7 @@ const SignIn = () => {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h3" align="center" gutterBottom>
+      <Typography variant="h3" align="center" gutterBottom color="primary">
         Sign In
       </Typography>
       <Formik
@@ -64,6 +64,7 @@ const SignIn = () => {
               className={classes.input}
               label="Username"
               type="username"
+              color="primary"
             />
             <TextField
               id="password"
@@ -74,12 +75,14 @@ const SignIn = () => {
               className={classes.input}
               label="Password"
               type="password"
+              color="primary"
             />
             <Button
-              variant="outlined"
+              variant="contained"
               fullWidth
               type="submit"
               onClick={handleSubmit}
+              color="secondary"
             >
               Continue
             </Button>

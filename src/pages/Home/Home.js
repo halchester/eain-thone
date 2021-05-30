@@ -80,6 +80,10 @@ function Home() {
           </Typography>
         ) : isLoading ? (
           <CircularProgress />
+        ) : data.instockItems.length === 0 ? (
+          <Typography align="center" variant="h6" color="secondary">
+            No items yet. Add new!
+          </Typography>
         ) : (
           <Box className={classes.container}>
             {data.instockItems.map((item, i) => (

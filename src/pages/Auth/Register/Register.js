@@ -28,7 +28,7 @@ function Register() {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h3" align="center" gutterBottom>
+      <Typography variant="h3" align="center" gutterBottom color="primary">
         Register
       </Typography>
       <Formik
@@ -60,6 +60,7 @@ function Register() {
               className={classes.input}
               label="Username"
               type="username"
+              color="primary"
             />
             <TextField
               id="password"
@@ -70,6 +71,7 @@ function Register() {
               className={classes.input}
               label="Password"
               type="password"
+              color="primary"
             />
             <TextField
               id="repassword"
@@ -80,10 +82,12 @@ function Register() {
               className={classes.input}
               label="Re-enter Password"
               type="password"
+              color="primary"
             />
             <Button
-              variant="outlined"
+              variant="contained"
               fullWidth
+              color="secondary"
               type="submit"
               onClick={handleSubmit}
             >
