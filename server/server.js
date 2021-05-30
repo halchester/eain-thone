@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 require("dotenv").config();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
@@ -33,6 +33,9 @@ const tobuyRoutes = require("./app/routers/tobuyitem.router");
 const instockRoutes = require("./app/routers/instockitem.router");
 app.use("/", userRoutes, tobuyRoutes, instockRoutes);
 
+app.get("/", (req, res) => {
+  res.send("ok");
+});
 // Connecting to DB
 mongoose
   .connect(

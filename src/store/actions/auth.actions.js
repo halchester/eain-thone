@@ -22,14 +22,11 @@ export const registerUser = (payload) => async (dispatch) => {
 
     dispatch({ type: actionTypes.LOADING_FALSE });
   } catch (err) {
-    if (err) {
-      const { data } = err.response;
-      dispatch({
-        type: actionTypes.REGISTER_USER_FAILURE,
-        payload: { message: data.error },
-      });
-      dispatch({ type: actionTypes.LOADING_FALSE });
-    }
+    dispatch({
+      type: actionTypes.REGISTER_USER_FAILURE,
+      payload: { message: err.response.data.error },
+    });
+    dispatch({ type: actionTypes.LOADING_FALSE });
   }
 };
 
@@ -57,15 +54,12 @@ export const signInUser = (payload) => async (dispatch) => {
     dispatch({ type: actionTypes.SIGNIN_USER_SUCCESS, payload: data });
     dispatch({ type: actionTypes.LOADING_FALSE });
   } catch (err) {
-    if (err) {
-      const { data } = err.response;
-      dispatch({
-        type: actionTypes.SIGNIN_USER_FAILURE,
-        payload: {
-          message: data.error,
-        },
-      });
-      dispatch({ type: actionTypes.LOADING_FALSE });
-    }
+    dispatch({
+      type: actionTypes.SIGNIN_USER_FAILURE,
+      payload: {
+        message: err.response.data.error,
+      },
+    });
+    dispatch({ type: actionTypes.LOADING_FALSE });
   }
 };

@@ -27,7 +27,7 @@ const SignIn = () => {
   }, []);
 
   if (auth.token) {
-    history.push("/home");
+    history.push("/");
   }
 
   return (
