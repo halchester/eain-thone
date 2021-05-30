@@ -58,7 +58,7 @@ export const signInUser = (payload) => async (dispatch) => {
     dispatch({
       type: actionTypes.SIGNIN_USER_FAILURE,
       payload: {
-        message: err.response.data.error,
+        message: "Something went wrong!",
       },
     });
     dispatch({ type: actionTypes.LOADING_FALSE });
