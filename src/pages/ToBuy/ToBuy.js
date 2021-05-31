@@ -35,7 +35,6 @@ const useStyles = makeStyles({
 
 function ToBuy() {
   const addNewTobuyItem = async ({ name, note }) => {
-    console.log("a paw function", name, note);
     const payload = {
       name,
       note,
