@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TobuyItemCard = ({ item, authKey }) => {
+const TobuyItemCard = ({ item, authKey, refetch }) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
@@ -35,10 +35,12 @@ const TobuyItemCard = ({ item, authKey }) => {
       })
       .then(() => {
         setLoading(false);
+        refetch();
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
+        refetch();
       });
   };
 
