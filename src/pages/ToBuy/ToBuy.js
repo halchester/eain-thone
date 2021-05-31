@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import CustomAppbar from "../../components/CustomAppbar";
 import TobuyItemCard from "../../components/TobuyItemCard";
 import { addNewTobuyItemValidation } from "../../utils/formValidation";
@@ -34,12 +34,45 @@ const useStyles = makeStyles({
 });
 
 function ToBuy() {
+  const addNewTobuyItem = async ({ name, note }) => {
+    const payload = {
+      name,
+      note,
+      userId: auth.userData.uniqueId,
+    };
+    await axios
+      .post("/api/tobuy", payload, {
+        headers: {
+          Auth: auth.token,
+        },
+      })
+      .then((response) => {
+        return response;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const classes = useStyles();
   const auth = useSelector((state) => state.auth);
-  const { data, isLoading, error } = useQuery(
-    ["getAllTobuyItem", auth.token, auth.userData.uniqueId],
+  const { data, isLoading, error, refetch } = useQuery(
+    ["tobuyItems", auth.token, auth.userData.uniqueId],
     getAllTobuyItemsOfUser
   );
+  const mutate = useMutation(addNewTobuyItem, {
+    onMutate: () => {
+      setLoading(true);
+    },
+    onError: (err) => {
+      console.log(err);
+      setLoading(false);
+    },
+    onSuccess: () => {
+      setLoading(false);
+      refetch();
+    },
+  });
   const [loading, setLoading] = useState(false);
 
   return (
@@ -53,25 +86,7 @@ function ToBuy() {
           }}
           validationSchema={addNewTobuyItemValidation}
           onSubmit={async ({ name, note }) => {
-            setLoading(true);
-            const payload = {
-              name,
-              note,
-              userId: auth.userData.uniqueId,
-            };
-            await axios
-              .post("/api/tobuy", payload, {
-                headers: {
-                  Auth: auth.token,
-                },
-              })
-              .then(() => {
-                setLoading(false);
-              })
-              .catch((err) => {
-                console.log(err);
-                setLoading(false);
-              });
+            mutate.mutate({ name, note });
           }}
         >
           {({
@@ -130,7 +145,12 @@ function ToBuy() {
             <CircularProgress style={{ margin: "0.5rem 0" }} />
           ) : (
             data.tobuyItems.map((item, idx) => (
-              <TobuyItemCard key={idx} item={item} authKey={auth.token} />
+              <TobuyItemCard
+                key={idx}
+                item={item}
+                authKey={auth.token}
+                refetch={refetch}
+              />
             ))
           )}
         </Box>
